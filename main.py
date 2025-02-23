@@ -1,5 +1,6 @@
 import pygame
 import constants
+from scorecard import ScoreCard
 from player import Player, Shot
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 def main():
     pygame.init()
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    
 
     clock = pygame.time.Clock()
     dt = 0
@@ -33,8 +35,9 @@ def main():
     Shot.containers = (shots, updateable, drawable)
     Asteroid.containers = (asteroids, updateable, drawable)
     AsteroidField.containers = (updateable,)
+    ScoreCard.containers = (drawable,)
     
-    
+    score_card = ScoreCard()
     our_player = Player(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2)
     our_asteroid_field = AsteroidField() 
     
@@ -55,6 +58,7 @@ def main():
             
             for shot in shots:
                 if shot.collision_check(asteroid):
+                    score_card.add_kill()
                     shot.kill()
                     asteroid.split()
 
